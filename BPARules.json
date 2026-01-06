@@ -608,5 +608,27 @@
     "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
     "Expression": "Name.ToUpper().Contains(\"MONTH\")\r\nand\r\n! Name.ToUpper().Contains(\"MONTHS\") \r\nand \r\n\n\nDataType == DataType.String \r\nand \r\nSortByColumn == null",
     "CompatibilityLevel": 1200
+  },
+  {
+    "ID": "UNUSED_MEASURE",
+    "Name": "[Maintenance] Remove unused measures",
+    "Category": "Maintenance",
+    "Description": "Measures that are not referenced anywhere in the model add clutter and increase maintenance effort. This rule detects measures that are hidden (or belong to hidden tables) and are not referenced by any visible model objects such as measures, columns, tables, or roles.",
+    "Severity": 2,
+    "Scope": "Measure",
+    "Expression": "(IsHidden or Table.IsHidden)\n\nand not ReferencedBy.AllMeasures.Any(not IsHidden)\n\nand not ReferencedBy.AllColumns.Any(not IsHidden)\n\nand not ReferencedBy.AllTables.Any(not IsHidden)\n\nand not ReferencedBy.Roles.Any()",
+    "FixExpression": "",
+    "CompatibilityLevel": 1200
+  },
+  {
+    "ID": "UNUSED_COLUMN",
+    "Name": "[Maintenance] Remove unused columns",
+    "Category": "Maintenance",
+    "Description": "Columns that are not referenced anywhere in the model add clutter and can negatively impact model manageability. This rule detects hidden columns (or columns in hidden tables) that are not referenced by any other object and are not used in relationships, sort by settings, or hierarchies.",
+    "Severity": 2,
+    "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
+    "Expression": "(IsHidden or Table.IsHidden)\n\nand ReferencedBy.Count = 0 \n\nand (not UsedInRelationships.Any())\n\nand (not UsedInSortBy.Any())\n\nand (not UsedInHierarchies.Any())",
+    "FixExpression": "",
+    "CompatibilityLevel": 1200
   }
 ]
